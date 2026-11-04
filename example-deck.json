@@ -1,0 +1,19 @@
+{
+  "title": "My first deck",
+  "description": "Import this file to test Recall Loop.",
+  "questions": [
+    {
+      "question": "What is 2 + 2?",
+      "options": [
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "correctIndex": 1,
+      "explanation": "Two plus two equals four.",
+      "source": "Example",
+      "topic": "Addition"
+    }
+  ]
+}

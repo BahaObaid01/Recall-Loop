@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111310"><meta name="description" content="A little practice, a lot of progress. Practise your own flashcards until every question is correct.">
+<title>Recall Loop — Keep going. Get it.</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23d5ed9b'/%3E%3Cpath d='M43 22a16 16 0 1 0 4 17M43 12v12H31' fill='none' stroke='%23111310' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+<body>
+<aside class="sidebar">
+<a class="brand" href="#" id="brand"><span class="brand-mark" aria-hidden="true">↻</span><span>recall<span class="brand-light">loop</span><small>KEEP GOING. GET IT.</small></span></a>
+<div class="nav-label">YOUR SPACE</div>
+<nav aria-label="Main navigation"><button class="nav-item active" id="nav-practice"><span data-icon="cards"></span>Practice<span class="nav-dot"></span></button><button class="nav-item" id="nav-decks"><span data-icon="grid"></span>Your decks<span class="deck-count" id="deck-count">2</span></button></nav>
+<div class="sidebar-decks"><div class="nav-label deck-label">QUICK ACCESS</div><div id="quick-decks"></div><button class="new-deck" id="sidebar-add"><span data-icon="plus"></span>Add a deck</button></div>
+<div class="sidebar-bottom"><div class="small-loop">↻</div><p>Small steps.<br><strong>Lasting knowledge.</strong></p><div class="local-status"><span></span>Saved in this browser</div></div>
+</aside>
+<div class="workspace">
+<header class="topbar"><div class="breadcrumb"><span class="mobile-brand">↻</span><span id="breadcrumb">Practice</span><span class="crumb-slash">/</span><span class="muted" id="crumb-deck">JavaScript essentials</span></div><div class="topbar-actions"><button class="button install-top" id="install-top"><span data-icon="download"></span>Get the app</button><button class="button add-top" id="add-top"><span data-icon="plus"></span>Add questions</button></div></header>
+<main id="main"></main>
+<footer class="page-footer"><span>One question closer.</span><button id="help-btn"><span data-icon="info"></span>How it works</button></footer>
+</div>
+<dialog id="add-dialog" aria-labelledby="dialog-title"><div class="dialog-top"><div><span class="eyebrow">MAKE IT YOURS</span><h2 id="dialog-title">Bring your own questions.</h2></div><button class="icon-button" id="close-dialog" aria-label="Close dialog">×</button></div>
+<div class="tabs" role="tablist" aria-label="Add questions"><button role="tab" id="tab-import" aria-controls="panel-import" aria-selected="true" data-tab="import">Import questions</button><button role="tab" id="tab-pdf" aria-controls="panel-pdf" aria-selected="false" data-tab="pdf">From a PDF</button><button role="tab" id="tab-write" aria-controls="panel-write" aria-selected="false" data-tab="write">Write cards</button></div>
+<div class="dialog-body">
+<section id="panel-import" role="tabpanel" aria-labelledby="tab-import"><p class="muted">Import a question file from ChatGPT, or paste its contents below.</p><label class="dropzone" id="dropzone"><input type="file" id="file-input" accept=".json,application/json"><span class="upload-circle" data-icon="upload"></span><strong>Choose a question file</strong><span>or drop your .json file here · up to 5 MB</span></label><div class="or-line"><span>OR PASTE JSON</span></div><label for="json-input" class="sr-only">Question JSON</label><textarea id="json-input" rows="5" spellcheck="false" placeholder='{"title": "My study deck", "questions": [...]}'></textarea><div class="form-error" id="import-error" role="alert"></div><div class="dialog-actions"><button class="text-button" id="download-template">Download example</button><button class="button primary" id="import-button">Import deck <span data-icon="arrow"></span></button></div></section>
+<section id="panel-pdf" role="tabpanel" aria-labelledby="tab-pdf" hidden><p class="muted">Turn your lecture, notes, or chapter into a question deck with ChatGPT.</p><ol class="steps"><li><span>01</span><div><strong>Attach your PDF in ChatGPT</strong><p>Choose the pages you want to study and add the prompt below.</p></div></li><li><span>02</span><div><strong>Get your question file</strong><p>Ask for a downloadable JSON file. Check the questions against your material.</p></div></li><li><span>03</span><div><strong>Import it here. Start your loop.</strong><p>Use Import questions to upload the file or paste the JSON.</p></div></li></ol><label for="pdf-prompt" class="field-label">READY-TO-USE PROMPT</label><textarea id="pdf-prompt" rows="7" readonly></textarea><div class="note"><span data-icon="info"></span><span>This first version imports question files. Direct PDF reading and automatic generation are not connected yet.</span></div><div class="dialog-actions"><button class="text-button" id="go-import">Go to import</button><button class="button primary" id="copy-prompt">Copy prompt <span data-icon="copy"></span></button></div></section>
+<section id="panel-write" role="tabpanel" aria-labelledby="tab-write" hidden><p class="muted">Make a small deck by hand. Add a question, choices, and the answer.</p><label class="field-label" for="deck-title">DECK TITLE</label><input id="deck-title" type="text" maxlength="160" placeholder="e.g. Chapter 1 — key concepts"><div id="draft-cards"></div><button class="button secondary" id="add-draft-card"><span data-icon="plus"></span>Add another question</button><div class="form-error" id="write-error" role="alert"></div><div class="dialog-actions"><span class="muted small">Choose the correct answer with its circle.</span><button class="button primary" id="save-written">Create deck <span data-icon="arrow"></span></button></div></section>
+</div></dialog>
+<dialog id="confirm-dialog" aria-labelledby="confirm-title"><div class="dialog-top"><h2 id="confirm-title">Start a fresh loop?</h2><button class="icon-button" id="cancel-confirm-x" aria-label="Close dialog">×</button></div><p id="confirm-body" class="muted"></p><div class="dialog-actions"><button class="button secondary" id="cancel-confirm">Cancel</button><button class="button primary" id="confirm-action">Start again</button></div></dialog>
+<dialog id="help-dialog" aria-labelledby="help-title"><div class="dialog-top"><h2 id="help-title">A simple loop. A clear goal.</h2><button class="icon-button" id="close-help" aria-label="Close help">×</button></div><ol class="steps"><li><span>01</span><div><strong>Answer one card at a time.</strong><p>Pick a choice, or use “I don’t know” to see the answer.</p></div></li><li><span>02</span><div><strong>Learn from what you miss.</strong><p>Wrong choices are marked without revealing the answer. Choose a maximum retry gap of 3, 7, or 10 other cards. With fewer cards left, retries return sooner. Changing card order during a session asks you to restart; changing the gap applies to future retries.</p></div></li><li><span>03</span><div><strong>Clear every question.</strong><p>Quick mode needs one correct answer per card. Reinforce needs two in a row for each card, with other cards between when possible.</p></div></li></ol><div class="note">Progress stays in this browser on this device. It does not sync across devices. Export your decks to keep a copy; exports contain questions, not session progress.</div><div class="keyboard-help"><kbd>1</kbd>–<kbd>6</kbd> Choose an answer <kbd>Enter</kbd> Next card</div></dialog>
+<div id="toast" class="toast" role="status"></div>
+<dialog id="install-dialog" aria-labelledby="install-title">
+<div class="dialog-top"><div><span class="eyebrow">YOUR LOOP, ANYWHERE</span><h2 id="install-title">A place on your desktop.</h2></div><button class="icon-button" id="close-install" aria-label="Close app options">×</button></div>
+<div class="dialog-body install-body"><p class="muted">Open Recall Loop in its own app window. No ChatGPT account or login needed.</p>
+<div class="install-card"><div class="install-symbol" aria-hidden="true">↻</div><div><h3>Install Recall Loop</h3><p>Use Chrome or Edge on Windows. After installation, open it from your Start menu or pin it to the taskbar.</p></div></div>
+<button class="button primary install-cta" id="install-native" hidden>Install app</button>
+<div id="install-instructions" class="note">In Edge or Chrome, look for the install icon in the address bar. You can also find the install option in the browser menu. On iPhone or iPad, use Safari’s Share menu → Add to Home Screen.</div>
+<p class="offline-state" id="offline-status" role="status">Preparing offline access…</p>
+<div class="portable-section"><h3>Or keep a portable copy.</h3><p>Download one HTML file and double-click it on your PC. It opens in your browser and works without internet or installation.</p><a class="button secondary" href="Recall_Loop.html" download="Recall_Loop.html" id="download-portable">Download offline copy <span data-icon="download"></span></a><p class="small portable-help">Keep the file in the same location. Its saved progress is separate from the website.</p></div>
+<div class="note">Your decks and progress stay on this device. Use the export button in Your decks, then import the file on another device to move your questions.</div>
+</div></dialog>
+<script type="module" src="app.js"></script>
+<script src="install.js" defer></script>
+</body></html>
